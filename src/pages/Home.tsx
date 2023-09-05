@@ -2,12 +2,18 @@ import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/rea
 import ExploreContainer from '../components/ExploreContainer';
 import './Home.css';
 
+import { IonSearchbar, IonButton } from '@ionic/react';
+
 const Home: React.FC = () => {
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonTitle>Blank</IonTitle>
+          <IonTitle>Ready</IonTitle>
+          <IonSearchbar placeholder="Custom Placeholder"></IonSearchbar>
+          
+          <IonButton>Buscar</IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
