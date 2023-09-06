@@ -7,10 +7,13 @@ import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import { IonInput } from '@ionic/react';
 import React, { useState } from "react";
 import loadData from '../load/LoadAlbums';
+import { JSX } from 'react/jsx-runtime';
 const urlAPI = "https://itunes.apple.com/search";
 
 let propertyValues = Array();
 const Home: React.FC = () => {
+  let cardNumber = 0;
+  let firstCard: any;
   const [isShown, setIsShown] = useState(false);
   const [data, setData] = useState(Object);
   const [searchText, setSearchText] = useState("");
@@ -76,17 +79,31 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonGrid id="bodyCards">
         {isShown && (
           <div>
             {propertyValues.map(albumInfo => 
             {
-              return (
-                <IonGrid>
-                  <CardAlbum albumCard={albumInfo}/>
-                </IonGrid>)            
-            })}
+              let card;
+              if (cardNumber == propertyValues.length - 1 && propertyValues.length % 2 == 0)
+              {
+                cardNumber = 0;
+                return (<CardAlbum albumCard={albumInfo}/>);
+              }
+              if (cardNumber%2 == 0)
+              {
+                firstCard = (<CardAlbum albumCard={albumInfo}/>);
+              }
+              else{
+                card = (<IonRow>{(firstCard)}<CardAlbum albumCard={albumInfo}/></IonRow>);
+              }
+              cardNumber = cardNumber + 1;
+              return (card);
+            })
+            }
           </div>
         )}
+        </IonGrid>
         {
           propertyValues.length == 0 && (
             <IonTitle>WITHOUT RESULTS</IonTitle>

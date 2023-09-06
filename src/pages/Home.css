@@ -17,10 +17,12 @@
     background-color: rgb(219, 219, 219);
 }
 .IonCol{
-    font-size: 16px;
     align-items: center;
 }
-.IonCard{
-    background-color: rgb(118, 150, 255);
-    border-radius: 0%;
+#bodyCards{
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
 }
+
