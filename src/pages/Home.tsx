@@ -122,18 +122,11 @@ const Home: React.FC = () => {
         </IonHeader>
         {isShown && (
           <div>
-            {propertyValues.map(album => 
+            {propertyValues.map(albumInfo => 
             {
               return (
                 <IonGrid>
-                  <IonCol size="6" size-md="6" size-lg="6">
-                      <IonCard>
-                        <img src={album.image?album.image:'../../dist/defaultImage.png'} alt="default"></img>
-                        <IonCardTitle>{album.name?album.name:"Sin Titulo"}</IonCardTitle>
-                        <IonCardSubtitle>Artista:{album.artistName?album.artistName:"Anonimo"}</IonCardSubtitle>
-                        <IonCardSubtitle>Precio: {album.price>0?(String(album.price)+"$"):"No aplica"}</IonCardSubtitle>
-                      </IonCard>
-                    </IonCol>
+                  <CardAlbum albumCard={albumInfo}/>
                 </IonGrid>)            
             })}
           </div>
