@@ -1,24 +1,19 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
 import CardAlbum from '../components/CardAlbum';
 import './Home.css';
 import Album from './Album';
 import { IonSearchbar, IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-
 import { IonCol, IonGrid, IonRow } from '@ionic/react';
 
 import { IonInput } from '@ionic/react';
 import React, { useEffect, useState } from "react";
 import { type } from 'os';
 
-
 const urlAPI = "https://itunes.apple.com/search";
 const request = urlAPI + "?term=jack+johnson&enitity=all";
 const defaultQuery = urlAPI + "?term=all";
 
 let propertyValues = Array();
-//https://itunes.apple.com/search?term=jack+johnson&enitity=all
 const Home: React.FC = () => {
   const [isShown, setIsShown] = useState(false);
   
@@ -42,6 +37,7 @@ const Home: React.FC = () => {
   useEffect(()=>{
     fetchData(defaultQuery);
   }, []);
+  
   function loadData(query = defaultQuery) {
     fetchData(query);
     try{
@@ -115,11 +111,6 @@ const Home: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
         {isShown && (
           <div>
             {propertyValues.map(albumInfo => 
@@ -137,17 +128,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-/*
-<IonSearchbar placeholder="Custom Placeholder" value={searchText} onIonChange={e => setSearchText(e.detail.value!)}></IonSearchbar>
-<div>
-          {users.length > 0 && (
-            <ul>
-              {
-              users.map(user => (<li>LL</li>))
-              }
-            </ul>
-          )}
-        </div>
-
-<ExploreContainer />
-*/
