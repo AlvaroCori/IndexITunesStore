@@ -11,15 +11,16 @@ import { type } from 'os';
 
 const urlAPI = "https://itunes.apple.com/search";
 const request = urlAPI + "?term=jack+johnson&enitity=all";
+const defaultQuery = urlAPI + "?term=all";
 let propertyValues = Array();
-//https://itunes.apple.com/search?term=jack+johnson&limit=25
+//https://itunes.apple.com/search?term=jack+johnson&enitity=all
 const Home: React.FC = () => {
   const [isShown, setIsShown] = useState(false);
   
   const [data, setData] = useState(Object);
   
-  const fetchData = () => {
-    fetch(request,
+  const fetchData = (query = defaultQuery) => {
+    fetch(query,
     {
       mode: "cors"
     }).then((response) => response.json())
@@ -87,10 +88,10 @@ const Home: React.FC = () => {
             {propertyValues.map(album => 
             {
               return (<div>
-                        <img src={album.image} alt="default"></img>
-                        <h1>{album.name}</h1>
-                        <h4>Artista:{album.artistName}</h4>
-                        <h4>Precio: {album.price}$</h4>
+                        <img src={album.image?album.image:'../../dist/defaultImage.png'} alt="default"></img>
+                        <h1>{album.name?album.name:"Sin Titulo"}</h1>
+                        <h4>Artista:{album.artistName?album.artistName:"Anonimo"}</h4>
+                        <h4>Precio: {album.price>0?(String(album.price)+"$"):"No aplica"}</h4>
                       </div>)
             })}
           </div>
