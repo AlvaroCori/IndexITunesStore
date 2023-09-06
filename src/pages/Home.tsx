@@ -6,6 +6,7 @@ import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import { IonInput } from '@ionic/react';
 import React, { useState } from "react";
 import loadData from '../load/LoadAlbums';
+
 const urlAPI = "https://itunes.apple.com/search";
 
 let propertyValues = Array();
@@ -19,8 +20,6 @@ const Home: React.FC = () => {
   const getAlbumCards = () =>{
     if (searchText == "" && val == ""){
       propertyValues = loadData(setData, data);
-      console.log(propertyValues);
-      console.log(propertyValues.sort(a => a.price));
       return;
     }
     if (searchText != "" && val == ""){
@@ -36,9 +35,7 @@ const Home: React.FC = () => {
   const handleClick = () => {
     setIsShown(true);
     getAlbumCards();
-    getAlbumCards();
   };
-  console.log("0", isShown);
   const listChange = (e: any) => {
     const newVal = e.detail.value;
     setVal(newVal);
@@ -82,7 +79,7 @@ const Home: React.FC = () => {
             {propertyValues.map(albumInfo => 
             {
               let card;
-              if (cardNumber == propertyValues.length - 1 && propertyValues.length % 2 == 0)
+              if (cardNumber == propertyValues.length - 1 && propertyValues.length % 2 == 1)
               {
                 cardNumber = 0;
                 return (<CardAlbum albumCard={albumInfo}/>);
@@ -112,7 +109,3 @@ const Home: React.FC = () => {
 };
 
 export default Home;
-
-/*
-<IonTitle>APPLE</IonTitle>
-*/
