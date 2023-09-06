@@ -3,11 +3,9 @@ import CardAlbum from '../components/CardAlbum';
 import './Home.css';
 import { IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
 import { IonCol, IonGrid, IonRow } from '@ionic/react';
-
 import { IonInput } from '@ionic/react';
 import React, { useState } from "react";
 import loadData from '../load/LoadAlbums';
-import { JSX } from 'react/jsx-runtime';
 const urlAPI = "https://itunes.apple.com/search";
 
 let propertyValues = Array();
@@ -49,7 +47,6 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader id="header">
         <IonToolbar>
-          <IonTitle>APPLE</IonTitle>
           <IonGrid>
             <IonRow>
               <IonCol>
@@ -106,7 +103,7 @@ const Home: React.FC = () => {
         </IonGrid>
         {
           propertyValues.length == 0 && (
-            <IonTitle>WITHOUT RESULTS</IonTitle>
+            <IonTitle id="voidTitle">WITHOUT RESULTS</IonTitle>
           )
         }
       </IonContent>
@@ -115,3 +112,7 @@ const Home: React.FC = () => {
 };
 
 export default Home;
+
+/*
+<IonTitle>APPLE</IonTitle>
+*/
