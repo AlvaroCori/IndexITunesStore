@@ -1,78 +1,43 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import CardAlbum from '../components/CardAlbum';
 import './Home.css';
-import Album from './Album';
-import { IonSearchbar, IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
+import { IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
 import { IonCol, IonGrid, IonRow } from '@ionic/react';
 
 import { IonInput } from '@ionic/react';
-import React, { useEffect, useState } from "react";
-import { type } from 'os';
-
+import React, { useState } from "react";
+import loadData from '../load/LoadAlbums';
 const urlAPI = "https://itunes.apple.com/search";
-const request = urlAPI + "?term=jack+johnson&enitity=all";
-const defaultQuery = urlAPI + "?term=all";
 
 let propertyValues = Array();
 const Home: React.FC = () => {
   const [isShown, setIsShown] = useState(false);
-  
   const [data, setData] = useState(Object);
   const [searchText, setSearchText] = useState("");
   const [val, setVal] = useState("");
-
-  const fetchData = (query=defaultQuery) => {
-    console.log(query);
-    fetch(query,
-    {
-      mode: "cors"
-    }).then((response) => response.json())
-    .then((datas) => {
-      setData(datas);
-    }).catch((error) => 
-    {
-      console.log(error);
-    });
-  };
-  useEffect(()=>{
-    fetchData(defaultQuery);
-  }, []);
-  
-  function loadData(query = defaultQuery) {
-    fetchData(query);
-    try{
-      propertyValues = Object.values(data.results).map(values=>{
-       let value = Object(values);
-       let album = Object();
-       album.id = value.trackId;
-       album.name = value.trackName;
-       album.kind = value.kind;
-       album.artistName = value.artistName;
-       album.price = value.trackPrice;
-       album.image = value.artworkUrl100;
-       return album;
-      });
-    }catch(error){
-      console.log(error);
-    }
-  }
-  const handleClick = () => {
-    setIsShown(current => !current);
-    console.log(searchText, val, "values");
+  const getAlbumCards = () =>{
     if (searchText == "" && val == ""){
-      loadData();
+      propertyValues = loadData(setData, data);
+      console.log(propertyValues);
+      console.log(propertyValues.sort(a => a.price));
       return;
     }
     if (searchText != "" && val == ""){
-      loadData(urlAPI+"?term="+searchText);
+      propertyValues = loadData(setData, data, urlAPI+"?term="+searchText);
       return;
     }
     if (searchText == "" && val != ""){
-      loadData(urlAPI+"?term="+val);
+      propertyValues = loadData(setData, data, urlAPI+"?term="+val);
       return;
     }
-    loadData(urlAPI+"?term="+searchText+"&enitity="+val);
+    propertyValues = loadData(setData, data, urlAPI+"?term="+searchText+"&enitity="+val);
+  }
+  const handleClick = () => {
+    setIsShown(true);
+    getAlbumCards();
+    getAlbumCards();
   };
+  console.log("0", isShown);
   const listChange = (e: any) => {
     const newVal = e.detail.value;
     setVal(newVal);
@@ -122,6 +87,11 @@ const Home: React.FC = () => {
             })}
           </div>
         )}
+        {
+          propertyValues.length == 0 && (
+            <IonTitle>WITHOUT RESULTS</IonTitle>
+          )
+        }
       </IonContent>
     </IonPage>
   );
