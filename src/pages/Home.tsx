@@ -5,6 +5,9 @@ import './Home.css';
 import Album from './Album';
 import { IonSearchbar, IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+
+import { IonCol, IonGrid, IonRow } from '@ionic/react';
+
 import { IonInput } from '@ionic/react';
 import React, { useEffect, useState } from "react";
 import { type } from 'os';
@@ -21,7 +24,8 @@ const Home: React.FC = () => {
   
   const [data, setData] = useState(Object);
   const [searchText, setSearchText] = useState("");
-  
+  const [val, setVal] = useState("");
+
   const fetchData = (query=defaultQuery) => {
     console.log(query);
     fetch(query,
@@ -32,7 +36,6 @@ const Home: React.FC = () => {
       setData(datas);
     }).catch((error) => 
     {
-      console.log("error");
       console.log(error);
     });
   };
@@ -56,40 +59,59 @@ const Home: React.FC = () => {
     }catch(error){
       console.log(error);
     }
-    console.log(propertyValues);
   }
   const handleClick = () => {
     setIsShown(current => !current);
-    console.log(searchText);
-    if (searchText == ""){
-      console.log("here");
+    console.log(searchText, val, "values");
+    if (searchText == "" && val == ""){
       loadData();
+      return;
     }
-    else{
-      console.log("here_2");
+    if (searchText != "" && val == ""){
       loadData(urlAPI+"?term="+searchText);
+      return;
     }
+    if (searchText == "" && val != ""){
+      loadData(urlAPI+"?term="+val);
+      return;
+    }
+    loadData(urlAPI+"?term="+searchText+"&enitity="+val);
+  };
+  const listChange = (e: any) => {
+    const newVal = e.detail.value;
+    setVal(newVal);
   };
   return (
     <IonPage>
-      <IonHeader>
+      <IonHeader id="header">
         <IonToolbar>
-          <IonTitle>Blank</IonTitle>
-          <IonTitle>Ready</IonTitle>
-          
-          <IonItem>
-            <IonInput label="Buscar" placeholder="..." clearInput={true} value={searchText} onIonInput={(e: any) => setSearchText(e.target.value)}></IonInput>
-          </IonItem>
-          <IonList>
-            <IonItem>
-              <IonSelect placeholder="all">
-                <IonSelectOption value="all">all</IonSelectOption>
-                <IonSelectOption value="music">music</IonSelectOption>
-                <IonSelectOption value="TV Show">TV Show</IonSelectOption>
-              </IonSelect>
-            </IonItem>       
-          </IonList>   
-          <IonButton onClick={handleClick}>Buscar</IonButton>
+          <IonTitle>APPLE</IonTitle>
+          <IonGrid>
+            <IonRow>
+              <IonCol>
+                <IonItem id="item">
+                  <IonInput label="Buscar" placeholder="..." clearInput={true} value={searchText} onIonInput={(e: any) => setSearchText(e.target.value)}></IonInput>
+                </IonItem>
+              </IonCol>
+              <IonCol>
+                <IonList id="list">
+                  <IonItem>
+                    <IonSelect aria-label="categories" interface="popover" placeholder="all" value={val} onIonChange={listChange}>
+                      <IonSelectOption value="all">all</IonSelectOption>
+                      <IonSelectOption value="song">music</IonSelectOption>
+                      <IonSelectOption value="tv-episode">TV Show</IonSelectOption>
+                      <IonSelectOption value="feature-movie">movie</IonSelectOption>
+                      <IonSelectOption value="podcast">podcast</IonSelectOption>
+                      <IonSelectOption value="music-video">musicVideo</IonSelectOption>
+                    </IonSelect>
+                  </IonItem>
+                </IonList>
+              </IonCol>
+              <IonCol>       
+                <IonButton id="button" onClick={handleClick}>Buscar</IonButton>
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -102,12 +124,17 @@ const Home: React.FC = () => {
           <div>
             {propertyValues.map(album => 
             {
-              return (<IonCard>
+              return (
+                <IonGrid>
+                  <IonCol size="6" size-md="6" size-lg="6">
+                      <IonCard>
                         <img src={album.image?album.image:'../../dist/defaultImage.png'} alt="default"></img>
                         <IonCardTitle>{album.name?album.name:"Sin Titulo"}</IonCardTitle>
                         <IonCardSubtitle>Artista:{album.artistName?album.artistName:"Anonimo"}</IonCardSubtitle>
                         <IonCardSubtitle>Precio: {album.price>0?(String(album.price)+"$"):"No aplica"}</IonCardSubtitle>
-                      </IonCard>)
+                      </IonCard>
+                    </IonCol>
+                </IonGrid>)            
             })}
           </div>
         )}

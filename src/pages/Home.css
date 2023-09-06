@@ -1,4 +1,26 @@
 *{
-    font-size: 20px;
-    background-color: bisque;
+    font-size: 14px;
+}
+#height{
+    height: 15%;
+}
+#item{
+    background-color: mediumturquoise;
+}
+#list{
+    background-color: black;
+}
+#button{
+    background-color: rebeccapurple;
+}
+#header{
+    background-color: rgb(219, 219, 219);
+}
+.IonCol{
+    font-size: 16px;
+    align-items: center;
+}
+.IonCard{
+    background-color: rgb(118, 150, 255);
+    border-radius: 0%;
 }
