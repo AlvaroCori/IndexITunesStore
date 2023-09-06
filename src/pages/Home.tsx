@@ -1,31 +1,62 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
 import ExploreContainer from '../components/ExploreContainer';
+import CardAlbum from '../components/CardAlbum';
 import './Home.css';
+import Album from './Album';
 import { IonSearchbar, IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
 
 import React, { useEffect, useState } from "react";
+import { type } from 'os';
 
 
-//const urlAPI = "https://itunes.apple.com/search?term=";
-//const request = urlAPI + "jack+johnson&limit=25";
+const urlAPI = "https://itunes.apple.com/search";
+const request = urlAPI + "?term=jack+johnson&enitity=all";
+let propertyValues = Array();
 //https://itunes.apple.com/search?term=jack+johnson&limit=25
 const Home: React.FC = () => {
-  //const express = require('express');
-  //const app = express();
-  const [data, setData] = useState([]);
+  const [isShown, setIsShown] = useState(false);
+  
+  const [data, setData] = useState(Object);
+  
   const fetchData = () => {
-    fetch("https://itunes.apple.com/search?term=jack+johnson&enitity=all",
+    fetch(request,
     {
       mode: "cors"
     }).then((response) => response.json())
-    .then((json) => {
-      console.log(json);
-      setData(data);
-    }).catch((error) => console.log(error));
+    .then((datas) => {
+      setData(datas);
+    }).catch((error) => 
+    {
+      console.log("error");
+      console.log(error);
+    });
   };
   useEffect(()=>{
     fetchData();
   }, []);
+  function loadData() {
+    fetchData();
+    try{
+      propertyValues = Object.values(data.results).map(values=>{
+       let value = Object(values);
+       let album = Object();
+       album.id = value.trackId;
+       album.name = value.trackName;
+       album.kind = value.kind;
+       album.artistName = value.artistName;
+       album.price = value.trackPrice;
+       album.image = value.artworkUrl100;
+       return album;
+      });
+    }catch(error){
+      console.log(error);
+    }
+    console.log(propertyValues);
+  }
+  const handleClick = () => {
+    setIsShown(current => !current);
+    loadData();
+  };
   return (
     <IonPage>
       <IonHeader>
@@ -42,7 +73,7 @@ const Home: React.FC = () => {
               </IonSelect>
             </IonItem>       
           </IonList>   
-          <IonButton onClick={fetchData}>Buscar</IonButton>
+          <IonButton onClick={handleClick}>Buscar</IonButton>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
@@ -51,17 +82,22 @@ const Home: React.FC = () => {
             <IonTitle size="large">Blank</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <ExploreContainer />
-        <div>
-          {data.length > 0 && (
-            <ul>
-              {
-              data.map(d => (<li>LL</li>))
-              }
-            </ul>
-          )}
-        </div>
+        {isShown && (
+          <div>
+            {propertyValues.map(album => 
+            {
+              return (<div>
+                        <img src={album.image} alt="default"></img>
+                        <h1>{album.name}</h1>
+                        <h4>Artista:{album.artistName}</h4>
+                        <h4>Precio: {album.price}$</h4>
+                      </div>)
+            })}
+          </div>
+        )}
       </IonContent>
+      <div>
+      </div>
     </IonPage>
   );
 };
@@ -77,4 +113,6 @@ export default Home;
             </ul>
           )}
         </div>
+
+<ExploreContainer />
 */
