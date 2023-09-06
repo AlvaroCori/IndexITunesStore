@@ -4,7 +4,8 @@ import CardAlbum from '../components/CardAlbum';
 import './Home.css';
 import Album from './Album';
 import { IonSearchbar, IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
-
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonInput } from '@ionic/react';
 import React, { useEffect, useState } from "react";
 import { type } from 'os';
 
@@ -12,14 +13,17 @@ import { type } from 'os';
 const urlAPI = "https://itunes.apple.com/search";
 const request = urlAPI + "?term=jack+johnson&enitity=all";
 const defaultQuery = urlAPI + "?term=all";
+
 let propertyValues = Array();
 //https://itunes.apple.com/search?term=jack+johnson&enitity=all
 const Home: React.FC = () => {
   const [isShown, setIsShown] = useState(false);
   
   const [data, setData] = useState(Object);
+  const [searchText, setSearchText] = useState("");
   
-  const fetchData = (query = defaultQuery) => {
+  const fetchData = (query=defaultQuery) => {
+    console.log(query);
     fetch(query,
     {
       mode: "cors"
@@ -33,10 +37,10 @@ const Home: React.FC = () => {
     });
   };
   useEffect(()=>{
-    fetchData();
+    fetchData(defaultQuery);
   }, []);
-  function loadData() {
-    fetchData();
+  function loadData(query = defaultQuery) {
+    fetchData(query);
     try{
       propertyValues = Object.values(data.results).map(values=>{
        let value = Object(values);
@@ -56,7 +60,15 @@ const Home: React.FC = () => {
   }
   const handleClick = () => {
     setIsShown(current => !current);
-    loadData();
+    console.log(searchText);
+    if (searchText == ""){
+      console.log("here");
+      loadData();
+    }
+    else{
+      console.log("here_2");
+      loadData(urlAPI+"?term="+searchText);
+    }
   };
   return (
     <IonPage>
@@ -64,7 +76,10 @@ const Home: React.FC = () => {
         <IonToolbar>
           <IonTitle>Blank</IonTitle>
           <IonTitle>Ready</IonTitle>
-          <IonSearchbar placeholder="Custom Placeholder"></IonSearchbar>
+          
+          <IonItem>
+            <IonInput label="Buscar" placeholder="..." clearInput={true} value={searchText} onIonInput={(e: any) => setSearchText(e.target.value)}></IonInput>
+          </IonItem>
           <IonList>
             <IonItem>
               <IonSelect placeholder="all">
@@ -87,24 +102,23 @@ const Home: React.FC = () => {
           <div>
             {propertyValues.map(album => 
             {
-              return (<div>
+              return (<IonCard>
                         <img src={album.image?album.image:'../../dist/defaultImage.png'} alt="default"></img>
-                        <h1>{album.name?album.name:"Sin Titulo"}</h1>
-                        <h4>Artista:{album.artistName?album.artistName:"Anonimo"}</h4>
-                        <h4>Precio: {album.price>0?(String(album.price)+"$"):"No aplica"}</h4>
-                      </div>)
+                        <IonCardTitle>{album.name?album.name:"Sin Titulo"}</IonCardTitle>
+                        <IonCardSubtitle>Artista:{album.artistName?album.artistName:"Anonimo"}</IonCardSubtitle>
+                        <IonCardSubtitle>Precio: {album.price>0?(String(album.price)+"$"):"No aplica"}</IonCardSubtitle>
+                      </IonCard>)
             })}
           </div>
         )}
       </IonContent>
-      <div>
-      </div>
     </IonPage>
   );
 };
 
 export default Home;
 /*
+<IonSearchbar placeholder="Custom Placeholder" value={searchText} onIonChange={e => setSearchText(e.detail.value!)}></IonSearchbar>
 <div>
           {users.length > 0 && (
             <ul>
