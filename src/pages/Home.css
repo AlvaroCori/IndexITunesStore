@@ -4,6 +4,9 @@
 #height{
     height: 10%;
 }
+#grid{
+    background: rgb(241, 241, 241);
+}
 #item{
     height: 60px;
 }
@@ -20,7 +23,7 @@
 }
 
 #header{
-    background-color: rgb(219, 219, 219);
+    background-color: rgb(211, 0, 0);
     height: 60px;
     align-self: center;
 }

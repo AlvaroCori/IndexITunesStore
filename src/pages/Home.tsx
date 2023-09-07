@@ -1,11 +1,11 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import CardAlbum from '../components/CardAlbum';
+import Carditem from '../components/ItemCard';
 import './Home.css';
 import { IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
 import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import { IonInput } from '@ionic/react';
 import React, { useState, useEffect } from "react";
-import loadData from '../load/LoadAlbums';
+import loadData from '../loadObjects/LoadObjects';
 
 const urlAPI = "https://itunes.apple.com/search";
 
@@ -18,7 +18,7 @@ const Home: React.FC = () => {
   const [searchText, setSearchText] = useState("");
   const [val, setVal] = useState("");
   let [propertyValues,setProperty]=useState(Array);
-  const getAlbumCards = () =>{
+  const getitemCards = () =>{
     if (searchText == "" && val == ""){
       setProperty(loadData(setData,data));
       return;
@@ -35,7 +35,7 @@ const Home: React.FC = () => {
   }
   const handleClick = () => {
     setIsShown(true);
-    getAlbumCards();
+    getitemCards();
   };
   const listChange = (e: any) => {
     const newVal = e.detail.value;
@@ -46,7 +46,7 @@ const Home: React.FC = () => {
     <IonPage>
       <IonHeader id="header">
         <IonToolbar>
-          <IonGrid>
+          <IonGrid id="grid">
             <IonRow>
               <IonCol>
                 <IonItem id="item">
@@ -78,20 +78,20 @@ const Home: React.FC = () => {
         <IonGrid id="bodyCards">
         {isShown && (
           <div>
-            {propertyValues.map(albumInfo => 
+            {propertyValues.map(itemInfo => 
             {
               let card;
               if (cardNumber == propertyValues.length - 1 && propertyValues.length % 2 == 1)
               {
                 cardNumber = 0;
-                return (<CardAlbum albumCard={albumInfo}/>);
+                return (<Carditem itemCard={itemInfo}/>);
               }
               if (cardNumber%2 == 0)
               {
-                firstCard = (<CardAlbum albumCard={albumInfo}/>);
+                firstCard = (<Carditem itemCard={itemInfo}/>);
               }
               else{
-                card = (<IonRow>{(firstCard)}<CardAlbum albumCard={albumInfo}/></IonRow>);
+                card = (<IonRow>{(firstCard)}<Carditem itemCard={itemInfo}/></IonRow>);
               }
               cardNumber = cardNumber + 1;
               return (card);
