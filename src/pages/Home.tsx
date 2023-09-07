@@ -4,12 +4,12 @@ import './Home.css';
 import { IonButton, IonItem, IonList, IonSelect, IonSelectOption } from '@ionic/react';
 import { IonCol, IonGrid, IonRow } from '@ionic/react';
 import { IonInput } from '@ionic/react';
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import loadData from '../load/LoadAlbums';
 
 const urlAPI = "https://itunes.apple.com/search";
 
-let propertyValues = Array();
+
 const Home: React.FC = () => {
   let cardNumber = 0;
   let firstCard: any;
@@ -17,20 +17,21 @@ const Home: React.FC = () => {
   const [data, setData] = useState(Object);
   const [searchText, setSearchText] = useState("");
   const [val, setVal] = useState("");
+  let [propertyValues,setProperty]=useState(Array);
   const getAlbumCards = () =>{
     if (searchText == "" && val == ""){
-      propertyValues = loadData(setData, data);
+      setProperty(loadData(setData,data));
       return;
     }
     if (searchText != "" && val == ""){
-      propertyValues = loadData(setData, data, urlAPI+"?term="+searchText);
+      setProperty(loadData(setData, data, urlAPI+"?term="+searchText));
       return;
     }
     if (searchText == "" && val != ""){
-      propertyValues = loadData(setData, data, urlAPI+"?term="+val);
+      setProperty(loadData(setData, data, urlAPI+"?term="+val));
       return;
     }
-    propertyValues = loadData(setData, data, urlAPI+"?term="+searchText+"&enitity="+val);
+    setProperty(loadData(setData, data, urlAPI+"?term="+searchText+"&enitity="+val));
   }
   const handleClick = () => {
     setIsShown(true);
@@ -40,6 +41,7 @@ const Home: React.FC = () => {
     const newVal = e.detail.value;
     setVal(newVal);
   };
+  useEffect(() => {}, [propertyValues]);
   return (
     <IonPage>
       <IonHeader id="header">

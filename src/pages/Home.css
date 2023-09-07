@@ -24,11 +24,6 @@
     height: 60px;
     align-self: center;
 }
-.IonCol{
-    align-items: center;
-    background:red;
-    border: 4px solid blue;
-}
 #bodyCards{
     align-items: center;
     justify-content: center;
